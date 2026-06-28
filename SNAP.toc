@@ -1,0 +1,10 @@
+## Interface: 20505
+## Title: SNAP - Swift NPC Auto Purchase
+## Notes: Automatically buys configured items from vendors while respecting quantity and gold limits.
+## Notes-ptBR: Compra automaticamente itens configurados de vendedores respeitando limites de quantidade e gold.
+## Author: Ingo Stramm
+## Version: 1.0.0
+## SavedVariablesPerCharacter: SNAPDB
+## DefaultState: enabled
+
+SNAP.lua
