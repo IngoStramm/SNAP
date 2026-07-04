@@ -44,10 +44,10 @@ local L = {
     ADDED = "Added item #%d.",
     DUPLICATE_ITEM = "Item #%d is already configured. Edit it in the configured items list.",
     REMOVED = "Removed item #%d.",
-    BOUGHT = "bought %dx %s for %s.",
-    WOULD_BUY = "test: would buy %dx %s for %s.",
-    SKIP_PRICE = "skipped %s: unit price %s is above limit %s.",
-    SKIP_BUDGET = "stopped: gold limit reached.",
+    BOUGHT = "Bought: %dx %s (%s).",
+    WOULD_BUY = "Test: %dx %s (%s).",
+    SKIP_PRICE = "Price too high: %s (%s > %s).",
+    SKIP_BUDGET = "Gold limit reached.",
     HELP_HEADER = "SNAP commands:",
     HELP_CONFIG = "/snap config - open options",
     HELP_ON = "/snap on - enable auto buy",
@@ -68,8 +68,7 @@ local L = {
     DEBUG = "Debug",
     DEBUG_ON = "Debug enabled.",
     DEBUG_OFF = "Debug disabled.",
-    DEBUG_ITEM = "vendor item %d: %s id=%s price=%s qty=%s available=%s matched=%s",
-    DEBUG_SCAN = "scanning %d vendor items.",
+    DEBUG_SCAN = "Vendor has %d items.",
     DEBUG_DISABLED = "skip %s: item is disabled.",
     DEBUG_EXTENDED = "skip %s: item uses extended cost.",
     DEBUG_DESIRED = "%s: desired purchases=%d, unit qty=%d, price=%s, budget=%s.",
@@ -109,10 +108,10 @@ if LOCALE == "ptBR" then
         ADDED = "Item #%d adicionado.",
         DUPLICATE_ITEM = "Item #%d ja esta configurado. Edite o item na lista de itens cadastrados.",
         REMOVED = "Item #%d removido.",
-        BOUGHT = "comprou %dx %s por %s.",
-        WOULD_BUY = "teste: compraria %dx %s por %s.",
-        SKIP_PRICE = "ignorou %s: preco unitario %s acima do limite %s.",
-        SKIP_BUDGET = "parou: limite de gold atingido.",
+        BOUGHT = "Comprou: %dx %s (%s).",
+        WOULD_BUY = "Teste: %dx %s (%s).",
+        SKIP_PRICE = "Preco alto: %s (%s > %s).",
+        SKIP_BUDGET = "Limite de gold atingido.",
         HELP_HEADER = "Comandos do SNAP:",
         HELP_CONFIG = "/snap config - abrir opcoes",
         HELP_ON = "/snap on - ativar compra automatica",
@@ -133,8 +132,7 @@ if LOCALE == "ptBR" then
         DEBUG = "Debug",
         DEBUG_ON = "Debug ativado.",
         DEBUG_OFF = "Debug desativado.",
-        DEBUG_ITEM = "item %d do vendedor: %s id=%s preco=%s qtd=%s disponivel=%s cadastrado=%s",
-        DEBUG_SCAN = "escaneando %d itens do vendedor.",
+        DEBUG_SCAN = "Vendedor tem %d itens.",
         DEBUG_DISABLED = "ignorou %s: item desativado.",
         DEBUG_EXTENDED = "ignorou %s: item usa custo especial.",
         DEBUG_DESIRED = "%s: compras desejadas=%d, qtd por compra=%d, preco=%s, orcamento=%s.",
@@ -218,7 +216,7 @@ local function EnsureDb()
     db.enabled = db.enabled and true or false
     db.testMode = db.testMode and true or false
     db.chat = db.chat and true or false
-    db.debug = db.debug and true or false
+    db.debug = db.chat and db.debug and true or false
 
     return db
 end
@@ -228,7 +226,7 @@ local function Print(message)
 end
 
 local function Debug(message)
-    if db and db.debug then
+    if db and db.chat and db.debug then
         Print(L.DEBUG .. ": " .. tostring(message))
     end
 end
@@ -543,15 +541,6 @@ function Snap:ScanMerchant()
         local name, _, price, stackSize, available, _, extendedCost = GetMerchantItemInfo(index)
         local itemID = GetMerchantItemID(index)
         local item = itemID and db.items[tostring(itemID)]
-        Debug(L.DEBUG_ITEM:format(
-            index,
-            name or "?",
-            itemID and tostring(itemID) or "?",
-            FormatMoney(price or 0),
-            tostring(stackSize or "?"),
-            tostring(available),
-            item and "yes" or "no"
-        ))
         if item and extendedCost and (not price or price <= 0) then
             Debug(L.DEBUG_EXTENDED:format(name or GetItemName(itemID)))
         elseif item then
@@ -1322,7 +1311,9 @@ function Snap:PLAYER_LOGIN()
     EnsureDb()
     self:RegisterInterfaceOptions()
     HookItemLinkInsertion()
-    Print(L.LOADED)
+    if db.chat then
+        Print(L.LOADED)
+    end
 end
 
 function Snap:MERCHANT_SHOW()

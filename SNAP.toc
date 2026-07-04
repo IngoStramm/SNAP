@@ -3,7 +3,7 @@
 ## Notes: Automatically buys configured items from vendors while respecting quantity and gold limits.
 ## Notes-ptBR: Compra automaticamente itens configurados de vendedores respeitando limites de quantidade e gold.
 ## Author: Ingo Stramm
-## Version: 1.0.0
+## Version: 1.0.1
 ## SavedVariablesPerCharacter: SNAPDB
 ## DefaultState: enabled
 
