@@ -1018,6 +1018,7 @@ function Snap:CreateOptionsPanel()
     EnsureDb()
     local panel = CreateFrame("Frame", "SNAPOptionsPanel")
     panel.name = L.TITLE
+    panel:SetSize(640, 512)
 
     local title = CreateText(panel, L.LONG_TITLE, "GameFontNormalLarge")
     title:SetPoint("TOPLEFT", panel, "TOPLEFT", 16, -16)
@@ -1162,7 +1163,7 @@ function Snap:OpenOptions()
             window = CreateFrame("Frame", "SNAPStandaloneOptionsFrame", UIParent)
         end
 
-        window:SetSize(920, 560)
+        window:SetSize(680, 560)
         window:SetPoint("CENTER")
         window:SetFrameStrata("FULLSCREEN_DIALOG")
         window:SetToplevel(true)
@@ -1198,7 +1199,7 @@ function Snap:OpenOptions()
     optionsPanel:SetParent(standaloneWindow.content)
     optionsPanel:ClearAllPoints()
     optionsPanel:SetPoint("TOPLEFT", standaloneWindow.content, "TOPLEFT", 0, 0)
-    optionsPanel:SetPoint("BOTTOMRIGHT", standaloneWindow.content, "BOTTOMRIGHT", 0, 0)
+    optionsPanel:SetSize(640, 512)
     optionsPanel:Show()
 
     standaloneWindow:Show()
