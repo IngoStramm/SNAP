@@ -38,7 +38,7 @@ SNAP automatically buys configured vendor items when you open an NPC/vendor wind
 
 ## Compatibility
 
-- Interface: `20505`
+- Interface: `20506`
 - Saved variables: `SNAPDB` per character
 - Tested for the WoW TBC Anniversary addon environment.
 
